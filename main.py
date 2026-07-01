@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from utils.documentLoader import load_document
 from utils.documentSplitter import splitText
+from utils.retrieveContext import retrieveContext
 from utils.storeVector import generateAndStoreEmbedding
 
 load_dotenv()
@@ -15,6 +16,6 @@ async def read_root():
   chunks = splitText(loadedDocument)
   vectorStore = generateAndStoreEmbedding(chunks)
 
-  print(vectorStore.index_to_docstore_id)
+  context = retrieveContext("What is Cristiano Ronaldo known for?", vectorStore)
 
-  return {"Hello": "whats up"}
+  return {"Hello": context}
