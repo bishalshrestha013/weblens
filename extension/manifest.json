@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Page RAG",
+  "version": "1.0.0",
+  "description": "Load the current page into the RAG vector store and ask questions about it.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Ask about this page"
+  },
+  "permissions": ["activeTab", "tabs"],
+  "host_permissions": ["http://localhost:8000/*"]
+}

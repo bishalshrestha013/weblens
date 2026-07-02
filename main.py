@@ -1,12 +1,21 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
+from constants import ALLOWED_ORIGINS
 from utils.ragPipeline import ingestDocument, answerQuestion
 
 load_dotenv()
 
 app = FastAPI()
+
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=ALLOWED_ORIGINS,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
 
 
 class IngestRequest(BaseModel):

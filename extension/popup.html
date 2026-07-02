@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        width: 340px;
+        margin: 0;
+        padding: 12px;
+        font-family: system-ui, sans-serif;
+        font-size: 13px;
+        color: #1a1a1a;
+      }
+      h1 {
+        font-size: 14px;
+        margin: 0 0 8px;
+      }
+      .url {
+        color: #555;
+        word-break: break-all;
+        margin-bottom: 10px;
+        font-size: 11px;
+      }
+      button {
+        width: 100%;
+        padding: 8px;
+        border: none;
+        border-radius: 6px;
+        background: #2563eb;
+        color: #fff;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      button:disabled {
+        background: #9db8f0;
+        cursor: default;
+      }
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 10px 0 8px;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 13px;
+        resize: vertical;
+      }
+      .status {
+        margin: 8px 0;
+        color: #555;
+        min-height: 16px;
+      }
+      .answer {
+        margin-top: 10px;
+        padding: 8px;
+        background: #f3f4f6;
+        border-radius: 6px;
+        white-space: pre-wrap;
+      }
+      hr {
+        border: none;
+        border-top: 1px solid #eee;
+        margin: 12px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Ask about this page</h1>
+    <div class="url" id="url">Loading…</div>
+    <button id="loadBtn">Load this page</button>
+
+    <hr />
+
+    <textarea id="question" rows="2" placeholder="Ask a question about this page…"></textarea>
+    <button id="askBtn">Ask</button>
+
+    <div class="status" id="status"></div>
+    <div class="answer" id="answer" hidden></div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
