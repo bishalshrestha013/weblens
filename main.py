@@ -1,30 +1,35 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 from dotenv import load_dotenv
-from utils.documentLoader import load_document
-from utils.documentSplitter import splitText
-from utils.retrieveContext import retrieveContext
-from utils.storeVector import generateAndStoreEmbedding
-from utils.generatePrompt import generatePrompt
-from langchain_openai import ChatOpenAI
+
+from utils.ragPipeline import ingestDocument, answerQuestion
 
 load_dotenv()
 
 app = FastAPI()
 
-@app.get("/")
-async def read_root():
-  loadedDocument = load_document("https://en.wikipedia.org/wiki/Cristiano_Ronaldo")
 
-  chunks = splitText(loadedDocument)
-  vectorStore = generateAndStoreEmbedding(chunks)
+class IngestRequest(BaseModel):
+  url: str
 
-  query = "What is Cristiano Ronaldo known for?"
 
-  context = retrieveContext(query, vectorStore)
+@app.post("/ingest")
+async def ingest(request: IngestRequest):
+  try:
+    chunkCount = ingestDocument(request.url)
+  except Exception as error:
+    raise HTTPException(status_code=500, detail=str(error))
 
-  generated_prompt = generatePrompt(context, query)
+  return {"url": request.url, "chunks": chunkCount}
 
-  llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
-  answer = llm.invoke(generated_prompt)
 
-  return {"answer": answer.content}
+@app.get("/query")
+async def query(q: str):
+  try:
+    answer = answerQuestion(q)
+  except FileNotFoundError as error:
+    raise HTTPException(status_code=400, detail=str(error))
+  except Exception as error:
+    raise HTTPException(status_code=500, detail=str(error))
+
+  return {"query": q, "answer": answer}
