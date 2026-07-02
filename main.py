@@ -4,6 +4,8 @@ from utils.documentLoader import load_document
 from utils.documentSplitter import splitText
 from utils.retrieveContext import retrieveContext
 from utils.storeVector import generateAndStoreEmbedding
+from utils.generatePrompt import generatePrompt
+from langchain_openai import ChatOpenAI
 
 load_dotenv()
 
@@ -16,6 +18,13 @@ async def read_root():
   chunks = splitText(loadedDocument)
   vectorStore = generateAndStoreEmbedding(chunks)
 
-  context = retrieveContext("What is Cristiano Ronaldo known for?", vectorStore)
+  query = "What is Cristiano Ronaldo known for?"
 
-  return {"Hello": context}
+  context = retrieveContext(query, vectorStore)
+
+  generated_prompt = generatePrompt(context, query)
+
+  llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+  answer = llm.invoke(generated_prompt)
+
+  return {"answer": answer.content}

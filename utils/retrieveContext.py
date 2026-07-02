@@ -4,6 +4,6 @@ def retrieveContext(query: str, vectorStore: FAISS):
     """returns the context of the document based on the query"""
     retriever = vectorStore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
-    context = retriever.invoke(query)
+    retrieved_docs = retriever.invoke(query)
 
-    return context
+    return "\n\n".join(docs.page_content for docs in retrieved_docs)
